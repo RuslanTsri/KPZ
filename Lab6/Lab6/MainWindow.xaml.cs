@@ -12,6 +12,7 @@ namespace Lab6
     public partial class MainWindow : Window
     {
         private readonly QRCodeService _qrService = new QRCodeService();
+        private string _lastGeneratedQRCodePath;
         private readonly DatabaseService _dbService = new DatabaseService();
 
         public MainWindow()
@@ -74,6 +75,26 @@ namespace Lab6
             }
         }
 
+private void ClearQRCodeImage(object sender, RoutedEventArgs e)
+{
+    QRCodeImage.Source = null;
+    _lastGeneratedQRCodePath = null;
+    StatusText.Text = "Зображення очищено";
+}
+
+private void CopyQRCodePath(object sender, RoutedEventArgs e)
+{
+    if (!string.IsNullOrEmpty(_lastGeneratedQRCodePath))
+    {
+        Clipboard.SetText(_lastGeneratedQRCodePath);
+        StatusText.Text = "Шлях скопійовано до буфера обміну";
+    }
+    else
+    {
+        StatusText.Text = "Немає шляху для копіювання";
+    }
+}
+
         private void GenerateQRCode(object sender, RoutedEventArgs e)
         {
             if (ContentTextBox == null)
@@ -99,18 +120,19 @@ namespace Lab6
             {
                 _qrService.GenerateQRCode(content, filePath);
                 _dbService.SaveQRCode(content, filePath);
-
+                _lastGeneratedQRCodePath = filePath;
                 BitmapImage bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.UriSource = new Uri(filePath, UriKind.Absolute);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
                 QRCodeImage.Source = bitmap;
-
+                StatusText.Text = $"QR-код успішно згенеровано: {DateTime.Now:HH:mm:ss}";
                 MessageBox.Show("QR-код згенеровано і збережено!");
             }
             catch (Exception ex)
             {
+                StatusText.Text = $"Помилка: {ex.Message}";
                 MessageBox.Show($"Помилка: {ex.Message}", "Помилка");
             }
         }
@@ -141,7 +163,7 @@ namespace Lab6
             if (QRCodeTypeComboBox.SelectedItem is ComboBoxItem selectedItem)
             {
                 string type = selectedItem.Content.ToString();
-
+                StatusText.Text = $"Обрано тип QR-коду: {type}";
                 switch (type)
                 {
                     case "Text":
