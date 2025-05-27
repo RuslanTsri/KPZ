@@ -11,6 +11,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
@@ -50,19 +51,27 @@
              GotFocus="TextBox_GotFocus" LostFocus="TextBox_LostFocus"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
-            <Button Content="Generate QR" Width="140" Margin="5" Click="GenerateQRCode"/>
-            <Button Content="View History" Width="140" Margin="5" Click="ViewSavedQRCodes"/>
-            <Button Content="Clear History" Width="140" Margin="5" Click="ClearHistory"/>
-        </StackPanel>
+<StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
+    <Button Content="Згенерувати QR" Width="140" Margin="5" Click="GenerateQRCode"/>
+    <Button Content="Переглянути історію" Width="140" Margin="5" Click="ViewSavedQRCodes"/>
+    <Button Content="Очистити історію" Width="140" Margin="5" Click="ClearHistory"/>
+</StackPanel>
+
+<StatusBar Grid.Row="5">
+    <StatusBarItem>
+        <TextBlock x:Name="StatusText" Text="Готово" />
+    </StatusBarItem>
+</StatusBar>
 
         <StackPanel Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20">
-            <TextBlock Text="Generated QR Code:" HorizontalAlignment="Center"/>
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,10">
-                <Image x:Name="QRCodeImage" Width="220" Height="220"
-                       Stretch="Uniform"
-                       SnapsToDevicePixels="True"/>
-            </Border>
-        </StackPanel>
+    <TextBlock Text="Згенерований QR-код:" HorizontalAlignment="Center"/>
+    <Border BorderBrush="Gray" BorderThickness="1" Padding="5" Margin="0,10">
+        <Image x:Name="QRCodeImage" Width="220" Height="220" Stretch="Uniform" SnapsToDevicePixels="True"/>
+    </Border>
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+        <Button x:Name="ClearImageButton" Content="Очистити зображення" Width="150" Margin="5" Click="ClearQRCodeImage"/>
+        <Button x:Name="CopyPathButton" Content="Копіювати шлях" Width="150" Margin="5" Click="CopyQRCodePath"/>
+    </StackPanel>
+</StackPanel>
     </Grid>
 </Window>
